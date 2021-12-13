@@ -29,6 +29,7 @@ def getMovies():
 
     money_per_movie = zip(titles,money)
     money_per_movie_dict = dict(money_per_movie)
+    #print(money_per_movie_dict)
     return money_per_movie_dict
 
 def setUpDatabase(db_name):
@@ -39,12 +40,15 @@ def setUpDatabase(db_name):
 
 def setUpMoneyTable(money_per_movie_dict, cur, conn):
     cur.execute('''CREATE TABLE IF NOT EXISTS Box_Office(Movie TEXT, Money_in_Millions TEXT)''')
+
     count = 0
     for key,value in money_per_movie_dict.items():
+        keys = key.split(' (')[0]
+       # print(keys)
         if count>24:
             break
-        if cur.execute('SELECT Money_in_Millions FROM Box_Office WHERE Movie = ? and Money_in_Millions = ?', (key, value)).fetchone()==None:
-            cur.execute('INSERT OR IGNORE INTO Box_Office(Movie, Money_in_Millions) VALUES (?,?)', (key, value))
+        if cur.execute('SELECT Money_in_Millions FROM Box_Office WHERE Movie = ? and Money_in_Millions = ?', (keys, value)).fetchone()==None:
+            cur.execute('INSERT OR IGNORE INTO Box_Office(Movie, Money_in_Millions) VALUES (?,?)', (keys, value))
             count += 1
     conn.commit()
 

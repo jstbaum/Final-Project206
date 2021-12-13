@@ -52,8 +52,8 @@ def getAvgRating(data, cur, conn):
     avg = sums / len(lst_of_ratings)
     return avg
 
-#get a dictionary of years and how many times it was in the top 250 movies
-def getDictOfYears(data, cur, conn):
+#get a dictionary of years and how many times it was in the top 100 movies
+def getTupleOfYears(data, cur, conn):
     years = cur.execute('SELECT year from Movies')
     lst = list(years)
     lst_of_years = []
@@ -66,10 +66,11 @@ def getDictOfYears(data, cur, conn):
         else:
             year_frequency[i] += 1
     year_frequency_sorted = sorted(year_frequency.items(), key=lambda x: x[1], reverse=True)
+    #print(year_frequency_sorted)
     return year_frequency_sorted[:14]
 
-def barchart_year_and_frequency(dictionary):
-    x, y = zip(*dictionary)
+def barchart_year_and_frequency(tup):
+    x, y = zip(*tup)
     plt.bar(x, y,alpha=1, color=['magenta','cyan','yellow','red'])
     plt.xticks(x, rotation = 45)
     plt.ylabel('Frequency of Year')
@@ -78,7 +79,7 @@ def barchart_year_and_frequency(dictionary):
     plt.tight_layout()
     plt.show()
 
-def director_freq_csv(dct, cur, conn, filename):
+def director_freq_txt(dct, cur, conn, filename):
     with open(filename, 'w') as file:
         heading = ['Director', 'Appearances']
         writer = csv.writer(file, delimiter=',')
@@ -94,9 +95,9 @@ def main():
     director_dict = countDirectors(directors)
     cur, conn = setUpDatabase('movies_final_project.db')
     getAvgRating(json_data, cur, conn)
-    dct = getDictOfYears(json_data, cur, conn)
-    barchart_year_and_frequency(dct)
-    director_freq_csv(director_dict, cur, conn, 'Director_Frequency.txt')
+    tup_of_years = getTupleOfYears(json_data, cur, conn)
+    barchart_year_and_frequency(tup_of_years)
+    director_freq_txt(director_dict, cur, conn, 'Director_Frequency.txt')
     conn.close()
 
 if __name__ == "__main__":

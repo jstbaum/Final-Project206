@@ -13,6 +13,7 @@ def Top100(key):
     url = 'https://imdb-api.com/en/API/Top250Movies/'
     response = requests.get(url, params=parameters).json()
     dct = response['items']
+    #print(dct[:100])
     return dct[:100]
 
 def setUpDatabase(db_name):
@@ -30,7 +31,7 @@ def setUpMoviesTable(data, cur, conn):
     for movie in data:
         title = movie['title']
         title_lst.append(title)
-        rank = movie['rank']
+        rank = float(movie['rank'])
         rank_lst.append(rank)
         year = movie['year']
         year_lst.append(year)

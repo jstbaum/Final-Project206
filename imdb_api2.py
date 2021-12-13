@@ -21,6 +21,7 @@ def getDirectors(key):
     for dir in top_dir:
         directors = dir['crew']
         director_list.append(directors.split('(dir.)')[0])
+    #print(type(director_list))
     return director_list
 
 def countDirectors(directors):
@@ -33,7 +34,14 @@ def countDirectors(directors):
             director_frequency[i] = 1
         else:
             director_frequency[i] += 1
+    #print(director_frequency)
     return director_frequency
+
+def setUpDatabase(db_name):
+    path = os.path.dirname(os.path.abspath(__file__))
+    conn = sqlite3.connect(path+'/'+db_name)
+    cur = conn.cursor()
+    return cur, conn
 
 def setUpDirectorsTable(director_dict, cur, conn):
    cur.execute('DROP TABLE IF EXISTS Directors')
@@ -54,12 +62,7 @@ def director_pie(director_frequency):
     plt.title('Amount of Times a Director has Directed 3 or More Movies in the Top 100 Movies')
     plt.axis('equal')
     plt.show()
- 
-def setUpDatabase(db_name):
-    path = os.path.dirname(os.path.abspath(__file__))
-    conn = sqlite3.connect(path+'/'+db_name)
-    cur = conn.cursor()
-    return cur, conn
+
 
 def main():
     json_data = Top100('k_jd2dmt0z')

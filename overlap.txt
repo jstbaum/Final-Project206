@@ -1,0 +1,21 @@
+Movie Title,Rank from IMDB API,B.O. in Millions from Ultimate Movie Rankings Website
+Amadeus,82.0,$173.50
+American Beauty,81.0,$216.70
+Apocalypse Now,53.0,$335.50
+Casablanca,48.0,$344.30
+Forrest Gump,12.0,$681.20
+Gladiator,44.0,$293.60
+Inception,13.0,$312.60
+One Flew Over the Cuckoo's Nest,18.0,$448.20
+Pulp Fiction,8.0,$223.00
+Saving Private Ryan,25.0,$389.20
+Schindler's List,6.0,$195.60
+Star Wars: Episode IV - A New Hope,26.0,$1549.90
+The Departed,45.0,$169.60
+The Godfather,2.0,$686.30
+The Godfather: Part II,3.0,$214.30
+The Great Dictator,56.0,$301.10
+The Lord of the Rings: The Fellowship of the Ring,10.0,$467.60
+The Lord of the Rings: The Return of the King,7.0,$527.10
+The Lord of the Rings: The Two Towers,14.0,$493.90
+The Silence of the Lambs,21.0,$261.80

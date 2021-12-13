@@ -99,7 +99,7 @@ def dctMoney(dct, cur, conn):
 
     return dct
 
-def csvMoney(Moneydct, filename, cur, conn):
+def txtMoney(Moneydct, filename, cur, conn):
     with open(filename, 'w') as file:
         heading = ['Money Range in Millions', 'Frequency']
         writer = csv.writer(file, delimiter = ',')
@@ -119,22 +119,34 @@ def barchart_money_and_frequency(dct):
     plt.tight_layout()
     plt.show()
 
-def title_and_dir(cur, conn):
-    cur.execute("""SELECT Movies.title, Directors.Director
-    FROM Movies JOIN Directors
-    ON Movies.Director = Directors.Director""")
+def money_and_movie(cur, conn):
+    cur.execute("""SELECT Box_Office.Movie, Movies.rank, Box_Office.Money_in_Millions
+    FROM Box_Office
+    INNER JOIN Movies ON Box_Office.Movie=Movies.title""")
     data = cur.fetchall()
     sorted_data = sorted(data, key=lambda x: x[0])
+    #print(type(sorted_data))
     return sorted_data
+
+def overlap_txt(sorted_data, filename):
+    with open(filename, 'w') as file:
+        heading = ['Movie Title', 'Rank from IMDB API', 'B.O. in Millions from Ultimate Movie Rankings Website']
+        writer = csv.writer(file, delimiter = ',')
+        writer.writerow(heading)
+        for title,rank,money in sorted_data:
+            writer.writerow((title,rank,money))
+    file.close()
+    return None
 
 def main():
     dct = getMovies()
     cur, conn = setUpDatabase('movies_final_project.db')
     avg = getAvgMoney(dct, cur, conn)
-    dctCsv = dctMoney(dct, cur, conn)
-    csvMoney(dctCsv, 'money_groups.txt', cur, conn)
-    barchart_money_and_frequency(dctCsv)
-    title_and_dir(cur, conn)
+    dctTxt = dctMoney(dct, cur, conn)
+    txtMoney(dctTxt, 'money_groups.txt', cur, conn)
+    barchart_money_and_frequency(dctTxt)
+    money_and_movie_join = money_and_movie(cur, conn)
+    overlap_txt(money_and_movie_join, 'overlap.txt')
 
 if __name__ == "__main__":
     main()
