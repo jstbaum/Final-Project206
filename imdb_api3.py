@@ -94,8 +94,8 @@ def director_freq_txt(dct, cur, conn, filename):
     return None
 
 def main():
-    json_data = Top100('k_jd2dmt0z')
-    directors = getDirectors('k_jd2dmt0z')
+    json_data = Top100('k_401budis')
+    directors = getDirectors('k_401budis')
     director_dict = countDirectors(directors)
     cur, conn = setUpDatabase('movies_final_project.db')
     getAvgRating(json_data, 'calculations1.txt', cur, conn)

@@ -65,8 +65,8 @@ def director_pie(director_frequency):
 
 
 def main():
-    json_data = Top100('k_jd2dmt0z')
-    directors = getDirectors('k_jd2dmt0z')
+    json_data = Top100('k_401budis')
+    directors = getDirectors('k_401budis')
     director_dict = countDirectors(directors)
     cur, conn = setUpDatabase('movies_final_project.db')
     setUpDirectorsTable(director_dict, cur, conn)
