@@ -42,7 +42,7 @@ def countDirectors(directors):
     return director_frequency
 
 #find the average imDb Rating
-def getAvgRating(data, cur, conn):
+def getAvgRating(data, filename, cur, conn):
     sums = 0
     ratings = cur.execute('SELECT imDbRating from Movies')
     lst_of_ratings = list(ratings)
@@ -50,6 +50,10 @@ def getAvgRating(data, cur, conn):
         num = float(i[0])
         sums += num
     avg = sums / len(lst_of_ratings)
+    with open(filename, 'w') as file:
+        writer = csv.writer(file)
+        writer.writerow(('The average IMDB Rating for the top 100 movies from the IMDB API (out of 10)', avg))
+    file.close()
     return avg
 
 #get a dictionary of years and how many times it was in the top 100 movies
@@ -94,7 +98,7 @@ def main():
     directors = getDirectors('k_jd2dmt0z')
     director_dict = countDirectors(directors)
     cur, conn = setUpDatabase('movies_final_project.db')
-    getAvgRating(json_data, cur, conn)
+    getAvgRating(json_data, 'calculations1.txt', cur, conn)
     tup_of_years = getTupleOfYears(json_data, cur, conn)
     barchart_year_and_frequency(tup_of_years)
     director_freq_txt(director_dict, cur, conn, 'Director_Frequency.txt')

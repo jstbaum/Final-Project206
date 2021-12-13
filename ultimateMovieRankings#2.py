@@ -37,7 +37,7 @@ def setUpDatabase(db_name):
     cur = conn.cursor()
     return cur, conn
 
-def getAvgMoney(dct, cur, conn):
+def getAvgMoney(dct, filename, cur, conn):
     sums = 0
     total_money = cur.execute('SELECT Money_in_Millions from Box_Office')
     lst_of_total_money = list(total_money)
@@ -46,6 +46,10 @@ def getAvgMoney(dct, cur, conn):
         number = float(dollar[1:])
         sums += number
         avg = sums / len(lst_of_total_money)
+    with open(filename, 'w') as file:
+        writer = csv.writer(file)
+        writer.writerow(('The average Box Office (in millions of dollars) from Ultimate Movie Rankings top 100 movies with the highest BO', avg))
+    file.close()
     return avg
 
 def dctMoney(dct, cur, conn):
@@ -141,7 +145,7 @@ def overlap_txt(sorted_data, filename):
 def main():
     dct = getMovies()
     cur, conn = setUpDatabase('movies_final_project.db')
-    avg = getAvgMoney(dct, cur, conn)
+    avg = getAvgMoney(dct,'calculations2.txt', cur, conn)
     dctTxt = dctMoney(dct, cur, conn)
     txtMoney(dctTxt, 'money_groups.txt', cur, conn)
     barchart_money_and_frequency(dctTxt)
