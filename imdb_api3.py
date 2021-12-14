@@ -73,6 +73,19 @@ def getTupleOfYears(data, cur, conn):
     #print(year_frequency_sorted)
     return year_frequency_sorted[:14]
 
+def director_pie(director_frequency):
+    directors = []
+    frequency = []
+    for x, y in director_frequency.items():
+        if y>=3:
+            directors.append(x)
+            frequency.append(y)
+    color = ['magenta','red','blue','yellow']
+    plt.pie(frequency,colors=color,labels=directors,autopct='%1.1f%%',radius=5,labeldistance=0.85,startangle=90,counterclock=False)
+    plt.title('Amount of Times a Director has Directed 3 or More Movies in the Top 100 Movies')
+    plt.axis('equal')
+    plt.show()
+
 def barchart_year_and_frequency(tup):
     x, y = zip(*tup)
     plt.bar(x, y,alpha=1, color=['magenta','cyan','yellow','red'])
@@ -100,6 +113,7 @@ def main():
     cur, conn = setUpDatabase('movies_final_project.db')
     getAvgRating(json_data, 'calculations1.txt', cur, conn)
     tup_of_years = getTupleOfYears(json_data, cur, conn)
+    director_pie(director_dict)
     barchart_year_and_frequency(tup_of_years)
     director_freq_txt(director_dict, cur, conn, 'Director_Frequency.txt')
     conn.close()

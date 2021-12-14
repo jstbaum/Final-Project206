@@ -44,25 +44,15 @@ def setUpDatabase(db_name):
     return cur, conn
 
 def setUpDirectorsTable(director_dict, cur, conn):
-   cur.execute('DROP TABLE IF EXISTS Directors')
-   cur.execute('CREATE TABLE IF NOT EXISTS "Directors"("Director" TEXT PRIMARY KEY, "Appearance" TEXT)')
+   cur.execute('''CREATE TABLE IF NOT EXISTS Directors(Director TEXT, Appearance TEXT)''')
+   count = 0
    for key, value in director_dict.items():
-       cur.execute('INSERT OR IGNORE INTO Directors (Director, Appearance) VALUES (?,?)', (key,value))
+       if count > 24:
+           break
+       if cur.execute('SELECT Appearance FROM Directors WHERE Director = ? and Appearance = ?', (key,value)).fetchone()==None:
+           cur.execute('INSERT OR IGNORE INTO Directors(Director,Appearance) VALUES (?,?)', (key,value))
+           count += 1
    conn.commit()
-
-def director_pie(director_frequency):
-    directors = []
-    frequency = []
-    for x, y in director_frequency.items():
-        if y>=3:
-            directors.append(x)
-            frequency.append(y)
-    color = ['magenta','red','blue','yellow']
-    plt.pie(frequency,colors=color,labels=directors,autopct='%1.1f%%',radius=5,labeldistance=0.85,startangle=90,counterclock=False)
-    plt.title('Amount of Times a Director has Directed 3 or More Movies in the Top 100 Movies')
-    plt.axis('equal')
-    plt.show()
-
 
 def main():
     json_data = Top100('k_401budis')
@@ -70,7 +60,7 @@ def main():
     director_dict = countDirectors(directors)
     cur, conn = setUpDatabase('movies_final_project.db')
     setUpDirectorsTable(director_dict, cur, conn)
-    director_pie(director_dict)
+
     conn.close()
 
 if __name__ == "__main__":

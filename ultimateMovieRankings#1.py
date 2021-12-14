@@ -40,7 +40,6 @@ def setUpDatabase(db_name):
 
 def setUpMoneyTable(money_per_movie_dict, cur, conn):
     cur.execute('''CREATE TABLE IF NOT EXISTS Box_Office(Movie TEXT, Money_in_Millions TEXT)''')
-
     count = 0
     for key,value in money_per_movie_dict.items():
         keys = key.split(' (')[0]
